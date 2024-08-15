@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="hidden" name="next" value="{{ request.GET.next }}">
+    <button type="submit" class="btn btn-primary">Done</button>
+</form>
+
+{% endblock %}
+

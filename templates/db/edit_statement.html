@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1>{{ statement.text }}</h1>
+
+<p>
+    <h2>Givens</h2>
+    <ul id="given-list">
+        {% for given in givens %}
+            <li>
+                <p>
+                    {{ given.text }} 
+                </p>    
+                {% if given.is_pure_text %}
+                    <a class="btn btn-primary" href="{% url 'edit_text_content' given.uid %}?next={{ request.path|urlencode }}">
+                        ✏
+                    </a>
+                {% else %}
+                    Blah
+                {% endif %}
+                <a class="btn btn-primary" href="{% url 'delete_content' given.uid %}?next={{ request.path|urlencode }}">
+                    ❎
+                </a>
+            </li>
+        {% endfor %}    
+        <li>
+            <form method="POST" id="add-given-form">
+                {% csrf_token %}
+                {{ add_given_form|crispy }}
+                <input type="hidden" name="statement_part" value="given">
+                <button type="submit" class="btn btn-primary">+</button>
+            </form>
+        </li>
+    </ul>
+    
+</p>
+
+<p>
+    <h2>Goals</h2>
+    <ul id="goal-list">
+        {% for goal in goals %}
+            <li>{{ goal.text }}</li>
+        {% endfor %}    
+        <li> 
+            <form method="POST" id="add-goal-form">
+                {% csrf_token %}
+                {{ add_goal_form|crispy }}
+                <input type="hidden" name="statement_part" value="goal">
+                <button type="submit" class="btn btn-primary">+</button>
+            </form>
+        </li>
+    </ul>    
+</p>
+
+{% endblock %}
