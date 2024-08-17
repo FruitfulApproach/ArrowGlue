@@ -2,7 +2,51 @@ from django.shortcuts import render, reverse, redirect
 from django.http import HttpResponseRedirect, JsonResponse
 from .models import *
 from .forms import *
-from neomodel.exceptions import * 
+from neomodel.exceptions import *
+import base64
+import json
+
+def save_prop(request):
+    try:            
+        if request.method == "POST":
+            json_data = request.POST['json']
+            json_data = json.loads(json_data)            
+            prop_id = json_data['prop_id']            
+            json_data = json_data['json_data']
+            
+            if json_data:
+                json_data = base64.b64decode(json_data)
+                json_data = json.loads(json_data)
+            
+            prop = Prop.nodes.get_or_none(uid=prop_id)
+            
+            if prop is None:
+                data = f"Proposition with UID {prop_id} not found in the database. 😭"            
+            else:
+                print("DEBUG:JSON DATA:: ", json_data)
+                
+                data = "Proposition saved to database. 😎"
+        else:
+            data = "Incorrect AJAX send method (needs to be POST)."
+    except Exception as e:
+        if __debug__:
+            raise e
+        else:
+            data = str(e)
+        
+    return JsonResponse(data, safe=False)
+
+
+def prop_editor(request):
+    prop = Prop()
+    prop.save()
+    
+    data = {
+        'prop_id' : prop.uid,       
+    }
+    
+    return render(request, 'db/prop_editor.html', context=data)
+
 
 def test1(request):
     #sketch = DiagramSketch(maintainer='EnjoysMath')

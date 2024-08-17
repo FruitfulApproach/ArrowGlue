@@ -3,82 +3,10 @@ from ArrowGlue.settings import MAX_DB_TEXT_LENGTH, MAX_USERNAME_LENGTH
 from neomodel import *
 from bidict import bidict
 
+class Arrow(StructuredRel):
+    sketch_src_index = IntegerProperty(default=-1)
+    sketch_dst_index = IntegerProperty(default=-1)
 
-class AbstrBase(StructuredNode):
-    text = StringProperty(max_length=MAX_DB_TEXT_LENGTH, default='')  
-    var_regex = StringProperty(max_length=2 * MAX_DB_TEXT_LENGTH)
-    
-    DERIVED_TYPES = {
-        'undefined': 'Undefined', 
-        'object': 'Object',
-        'arrow': 'Arrow',
-        'diagram': 'DiagramSketch',
-        'text': 'PureTextLang',
-        'statement': 'Statement',        
-    }
-    type = StringProperty(choices=DERIVED_TYPES, default='undefined')
-    
-    @staticmethod
-    def factory(uninflated):
-        base_inflate = AbstrBase.inflate(uninflated)        
-        return eval(f'{base_inflate.type}.inflate(uninflated)')    
-    
-        
-
-class AbstrNode(AbstrBase):    
-    sketch_index = IntegerProperty(default=-1)
-    sketch_uid = StringProperty(default='')          
-    color = JSONProperty(default={'h': 0, 's': 0, 'l' : 0, 'a': 1,})
-    
-    QUANTIFIERS = {0: 'forall', 1: 'exists', 2: 'bound',}
-    quantifier = BooleanProperty(choices=QUANTIFIERS, default=0)
-    
-    
-class Connection(StructuredRel):
-    pass
-
-   
-class Object(AbstrNode):
-    sourced_arrows = RelationshipTo('Arrow', 'CONNECTS', cardinality=ZeroOrMore, model=Connection)
-    
-    pure_styling_info = JSONProperty(
-        default={
-            'x': 0, 'y': 0
-        })    
-    
-    def __init__(self, *args, **kwargs):
-        self.type = 'object'
-        super().__init__(*args, **kwargs)
-        
-    
-    def from_quiver_format(self, fmt, index):
-        self.parent_index = index
-        
-        pure_style = {
-            'x' : fmt[0],
-            'y' : fmt[1],
-        }
-        
-        self.pure_styling_info = pure_style
-        
-        if len(fmt) > 2:
-            self.text = fmt[2]
-            
-        if len(fmt) > 3:
-            self.color = fmt[3]
-        
-        self.save()
-        
-    def to_quiver_format(self):
-        pure_style = self.pure_styling_info        
-        return [pure_style['x'], pure_style['y'], self.text, self.color] 
-            
-                
-                
-class Arrow(AbstrNode):
-    src = RelationshipTo('AbstrNode', 'FROM', cardinality=One, model=Connection)
-    dst = RelationshipTo('AbstrNode', 'CONNECTS', cardinality=One, model=Connection)
-    
     NUM_LINES = {1: 'one', 2: 'two', 3: 'three', 4: 'four',}
     TAIL_STYLE = {0:'none', 1:'mono', 2:'hook', 3:'arrowhead', 4:'CONNECTS_TO'} 
     HEAD_STYLE = {0:'none', 1:'arrowhead', 2:'epi', 3:'harpoon'}
@@ -104,13 +32,7 @@ class Arrow(AbstrNode):
             'hdtrim': 0,
             'tailsd': 0,
             'headsd': 0,
-        })
-    
-
-    def __init__(self, *args, **kwargs):
-        self.type = 'arrow' 
-        super().__init__(*args, **kwargs)
-         
+        })         
     
     def from_quiver_format(self, fmt, index):
         self.parent_index = index
@@ -190,7 +112,7 @@ class Arrow(AbstrNode):
         self.save()
                 
     def to_quiver_format(self):
-        fmt = [self.src.parent_index, self.dest.parent_index]
+        fmt = [self.sketch_src_index, self.sketch_dst_index]
         fmt.append(self.text if self.text is not None else '')
         pure_style = self.pure_styling_info        
         fmt.append(pure_style['algmt'])
@@ -224,99 +146,133 @@ class Arrow(AbstrNode):
         fmt.append(opts)
         fmt.append(self.color)
         
-        return fmt    
+        return fmt
     
-class Content(AbstrBase):
+
+class ObjectArrow(StructuredNode):
+    text = StringProperty(max_length=MAX_DB_TEXT_LENGTH, default='')  
+    var_regex = StringProperty(max_length=2 * MAX_DB_TEXT_LENGTH)
+    
+    # For quiver editor:
+    sketch_index = IntegerProperty(default=-1)
+    prop_id = StringProperty(default='')
+    
+    # H,S,L,A:
+    color = JSONProperty(default=[0.0, 0.0, 0.0, 1.0])
+    # Node-only:
+    node_pos = JSONProperty(default=[0, 0])
+    
+    # To support arrot2arrow arrow2node conns we blended Arrow with Node.
+    is_arrow = BooleanProperty(default=False)
+    
+    QUANTIFIERS = {0: 'forall', 1: 'exists', 2: 'bound',}
+    quantifier = BooleanProperty(choices=QUANTIFIERS, default=0)
+    
+    # This is treated as a ZeroOrMore for Arrows.
+    arrows_out = RelationshipTo('ArrowNode', 'ARROWS_TO', cardinality=ZeroOrMore,
+                            model=Arrow)
+    
+    def from_quiver_format(self, fmt, index):
+        self.sketch_index = index        
+        pure_style = [fmt[0], fmt[1]]        
+        self.pure_styling_info = pure_style
+        
+        if len(fmt) > 2:
+            self.text = fmt[2]
+            
+        if len(fmt) > 3:
+            self.color = fmt[3]
+        
+        self.save()
+        
+    def to_quiver_format(self):
+        pure_style = self.pure_styling_info        
+        return [pure_style[0], pure_style[1], self.text, self.color]
+    
+                
+class Prop(StructuredNode):
     # Inherits text already    
     uid = UniqueIdProperty()
     
-    maintainer = StringProperty(max_length=MAX_USERNAME_LENGTH, required=True)
+    maintainer = StringProperty(max_length=MAX_USERNAME_LENGTH)
     creation_datetime = DateTimeProperty(default_now=True)
     datetime_edited = DateTimeProperty(default_now=True)
     
-    display_index = IntegerProperty(required=True)    
-    sketch = RelationshipTo('DiagramSketch', "DRAWN_AS", cardinality=ZeroOrOne)
+    left_grouping = RelationshipTo('Prop', 'GROUPS', cardinality=ZeroOrOne)
+    # Right-associative =>:
+    right_assoc_implies = RelationshipTo('Prop', 'IMPLIES', cardinality=ZeroOrOne)
     
-    @property
-    def is_pure_text(self):
-        #query = f"""
-        #MATCH (c:Content)-[r:DRAWN_AS]->(d:DiagramSketch)
-        #WHERE c.uid = {self.uid}
-        #RETURN count(r)
-        #"""
-        #results = db.cypher_query(query)
+    logic_negated = BooleanProperty(default=False)
+
+    diagram_commutes = BooleanProperty(default=False)
+    equivalents = RelationshipTo('Prop', 'EQUIV', cardinality=ZeroOrMore)
+    
+    def from_quiver_format(self, fmt):
+        objects = []
+        vertices = fmt[2:2 + fmt[1]]
         
-        #print("IS PURE TEXT (results):", results)
+        for k,v in enumerate(vertices):
+            o = ObjectArrow(sketch_index=k)
+            o.from_quiver_format(v, k)
+            o.save()            
+            objects.append(o)
         
-        #return results[0] == 0
+        arrows = fmt[2 + fmt[1]:]
+            
+        for k,e in enumerate(arrows):
+            if k < len(objects):
+                A = objects[e[0]]
+                B = objects[e[1]]
+            else:
+                
+                F = ObjectArrow(sketch_index=k)
+                F.is_arrow = True
+                F.save()
+                
+                f = A.arrows_out.connect(F)
+                F.domain.connect(A)
+                f.from_quiver_format(e)
+                A.save()
+                
+                f.save()
+                F.codomain.connect(B)
+                F.save()
+                
+                
+        self.add_objects(objects)               
+    
+    def to_quiver_format(self):
+        edges = []
+        vertices = []
         
-        return len(self.sketch) == 0
+        objects = self.objects()
+        objects.sort(key=lambda x: x.sketch_index)        
         
-    
-class DiagramSketch(AbstrBase):
-    associated_rule = RelationshipTo('Statement', 'NOTATION', cardinality=ZeroOrOne)
+        for o in objects:
+            vertices.append(o.to_quiver_format())
+            for f in o.arrows_out.all():
+                edges.append(f.arrow_to_quiver_format())
+                    
+        fmt = [0, len(vertices)]
+        fmt += vertices
+        fmt += edges
         
-    def __init__(self, *args, **kwargs):
-        self.type = 'diagram' 
-        super().__init__(*args, **kwargs)       
-
-class PureTextLang(AbstrBase):
-    def __init__(self, *args, **kwargs):
-        self.type = 'text'
-        super().__init__(*args, **kwargs)
+        return fmt        
         
-
-class Contains(StructuredRel):
-    pass
+    def left(self):
+        return self.prop_grouping.get()
     
-class Statement(AbstrBase):
-    uid = UniqueIdProperty()
-    content = RelationshipTo('Content', 'CONTAINS', cardinality=OneOrMore)
-    given_indices = JSONProperty(default=[])
-    goal_indices = JSONProperty(default=[])    
-
-    def __init__(self, *args, **kwargs):
-        self.type = 'statement'
-        super().__init__(*args, **kwargs)
-        
-class Prop(AbstrBase):
-    uid = UniqueIdProperty()
-        
-class Proposition(AbstrBase):
-    content = RelationshipTo('Content', 'CONTAINS', cardinality=One)
-
-class RightAssoc(Proposition):
-    pass
+    def right(self):
+        return self.implies_prop.get()
     
-
-class Definition(Statement):
-    pass
-
-class Conjecture(Statement):
-    pass
-
-
-class Theorem(Statement):
-    proof = RelationshipTo('Proof', 'PROVEN_BY', cardinality=OneOrMore)
-    
-
-    
-    
-    
-    
-    
-class Proof(AbstrBase):
-    uid = UniqueIdProperty()
-    statement = RelationshipTo('Statement', 'PROVES', cardinality=One)
-    
-    def __init__(self, *args, **kwargs):
-        self.type = 'proof'
-        super().__init__(*args, **kwargs)
-
-    
-#class WordDefinition(Proof):
-    #binding_words = RelationshipTo('PureTextLang', 'WORD', cardinality=One)
-    #expansion = RelationshipTo('AbstrBase', 'EXPAND', cardinality=OneOrMore, model=ProofOrder)
-    
+    def objects(self):
+        query = f'''
+        MATCH (X:ObjectArrow)
+        WHERE X.prop_uid={self.uid}
+        RETURN X
+        '''        
+        results = db.cypher_query(query)        
+        results = [ObjectArrow.inflate(row[0]) for row in results]
+        return results
     
     

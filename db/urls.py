@@ -2,6 +2,8 @@ import db.views as views
 from django.urls import path
 
 urlpatterns = [
+    path("save-prop/", views.save_prop, name="save_prop"), 
+    path("prop-editor/", views.prop_editor, name="prop_editor"), 
     path("define/", views.define, name="define"), 
     path("", views.index, name="db_index"), 
     path("delete-content/<str:content_id>", views.delete_content, name="delete_content"), 

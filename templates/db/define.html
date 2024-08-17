@@ -11,7 +11,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css?family=Ribeye+Marrow&display=swap" rel="stylesheet"/>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" rel="stylesheet"/>
+  <link href='{% static "css/Custom-Quiver-Navbar.css" %}' rel="stylesheet"/>
   <link href='{% static "css/Navbar-Right-Links-icons.css" %}' rel="stylesheet"/>
  </head>
  <body>
@@ -24,7 +24,7 @@
        </path>
       </svg>
      </span>
-     <span style="font-size: 21px;color: #7c07c3;font-family: 'Indie Flower', serif;font-weight: bold;">
+     <span style="font-size: 23px;color: #fca311;font-family: 'Indie Flower', serif;font-weight: bold;">
       ArrowGlue
      </span>
     </a>
@@ -67,10 +67,11 @@
    </div>
   </section>
   <div class="container d-sm-flex justify-content-sm-center align-items-sm-center" style="background: var(--bs-info-border-subtle);padding: 21px;border-radius: 15px;">
-   <button class="btn btn-primary bounce animated" style="padding: 6px 12px;position: fixed;" type="button">
-    Button
-   </button>
+   <div dj-incude="db/quiver_editor_include.html">
+   </div>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js">
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
   </script>
   <script src='{% static "js/bs-init.js" %}'>

@@ -2,4 +2,3 @@ neomodel
 django_neomodel
 django-crispy-forms
 crispy-bootstrap5
-djangoajax

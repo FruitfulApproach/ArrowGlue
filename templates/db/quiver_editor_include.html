@@ -1,0 +1,115 @@
+{% load static %}
+
+<iframe sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals"
+    src='{% static "quiver/src/index.html" %}' 
+    style="height:96vh;width:100%;border:none;overflow:hidden;"
+    id="quiver-frame">
+</iframe>
+    
+<script type="text/javascript">
+    var prop_id = "{{ prop_id }}";
+    
+      //find iframe
+    var quiver_frame = null; 
+    var quiver_save_btn = null;
+    var quiver_undo_btn = null;
+    var quiver_redo_btn = null;
+    var quiver_delete_btn = null;
+    
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        quiver_frame = document.getElementById("quiver-frame");
+        
+        quiver_frame.addEventListener("load", function() {      
+            var buttons = quiver_frame.contentWindow.document.getElementsByTagName("button");             
+            
+            for (var i = 0; i < buttons.length; i++)
+            {   
+                var button = buttons[i];
+                
+                if (button.hasAttribute('data-name'))
+                {
+                    var data_name = button.getAttribute('data-name');
+                    
+                    switch (data_name)
+                    {
+                        case 'Save':
+                            quiver_save_btn = button;
+                            break;
+                        case 'Undo':
+                            quiver_undo_btn = button;
+                            break;
+                        case 'Redo':
+                            quiver_redo_btn = button;
+                            break;
+                        case 'Delete':
+                            quiver_delete_btn = button;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        });       
+       
+    });
+    
+    function undo() {
+        quiver_undo_btn.click();
+    }
+    
+    function redo() {
+        quiver_redo_btn.click();
+    }
+    
+    function delete_selected()
+    {
+        quiver_delete_btn.click();
+    }
+        
+    function save_prop() {
+        quiver_frame.contentWindow.location.href = '/db/prop-editor/{{ prop_id }}';
+        quiver_save_btn.click();        
+        
+        var json_data = null;
+        
+        do {
+            var save_data = quiver_frame.contentWindow.location.href;            
+        } while (save_data == '');
+        
+        if (save_data.indexOf("#q=") != -1)
+        {
+            var base_url = save_data.split("#q=");
+            json_data = base_url[1];
+            base_url = base_url[0];
+            
+            json_data = {
+                'prop_id' : prop_id,
+                'json_data' : json_data,
+            }            
+        }
+        else {
+            json_data = {
+                'prop_id': prop_id,
+                'json_data' : '',
+            }
+        }    
+        
+        $.ajax({
+            type: "POST",
+            url: "{% url 'save_prop' %}",
+            
+            data: {
+                 csrfmiddlewaretoken: "{{ csrf_token }}",
+                 json: JSON.stringify(json_data)
+            },
+            
+            success: function (response) {
+                // save_prop service's response:
+                console.log(response);
+            }
+        });
+    }
+</script>
+
+
+
