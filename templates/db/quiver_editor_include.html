@@ -16,6 +16,7 @@
     var quiver_redo_btn = null;
     var quiver_delete_btn = null;
     var quiver_select_all_btn = null;
+    var quiver_select_none_btn = null;
     
     document.addEventListener("DOMContentLoaded", function(event) { 
         quiver_frame = document.getElementById("quiver-frame");
@@ -47,6 +48,9 @@
                             break;
                         case 'Select all':
                             quiver_select_all_btn = button;
+                            break;                            
+                        case 'Deselect all':
+                            quiver_select_none_btn = button;
                             break;
                         default:
                             break;
@@ -56,6 +60,11 @@
         });       
        
     });
+    
+    function select_none()
+    {
+        quiver_select_none_btn.click();
+    }
     
     function select_all()
     {
