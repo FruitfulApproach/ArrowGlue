@@ -15,6 +15,7 @@
     var quiver_undo_btn = null;
     var quiver_redo_btn = null;
     var quiver_delete_btn = null;
+    var quiver_select_all_btn = null;
     
     document.addEventListener("DOMContentLoaded", function(event) { 
         quiver_frame = document.getElementById("quiver-frame");
@@ -44,6 +45,9 @@
                         case 'Delete':
                             quiver_delete_btn = button;
                             break;
+                        case 'Select all':
+                            quiver_select_all_btn = button;
+                            break;
                         default:
                             break;
                     }
@@ -52,6 +56,11 @@
         });       
        
     });
+    
+    function select_all()
+    {
+        quiver_select_all_btn.click();
+    }
     
     function undo() {
         quiver_undo_btn.click();
@@ -67,14 +76,15 @@
     }
         
     function save_prop() {
-        quiver_frame.contentWindow.location.href = '/db/prop-editor/{{ prop_id }}';
+        quiver_frame.contentWindow.location.href = '{{ request.path }}';
         quiver_save_btn.click();        
         
         var json_data = null;
         
         do {
             var save_data = quiver_frame.contentWindow.location.href;            
-        } while (save_data == '');
+        } 
+        while (save_data == '{{ request.path }}');
         
         if (save_data.indexOf("#q=") != -1)
         {
