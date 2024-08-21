@@ -1,7 +1,6 @@
 from ArrowGlue.settings import MAX_DB_TEXT_LENGTH, MAX_USERNAME_LENGTH
 # Create your models here.
 from neomodel import *
-from bidict import bidict
 
 class Arrow(StructuredRel):
     sketch_src_index = IntegerProperty(default=-1)
