@@ -17,6 +17,10 @@
     var quiver_delete_btn = null;
     var quiver_select_all_btn = null;
     var quiver_select_none_btn = null;
+    var quiver_zoom_in_btn = null;
+    var quiver_zoom_out_btn = null;
+    var quiver_reset_zoom_btn = null;
+    var quiver_center_view_btn = null;
     
     document.addEventListener("DOMContentLoaded", function(event) { 
         quiver_frame = document.getElementById("quiver-frame");
@@ -52,6 +56,18 @@
                         case 'Deselect all':
                             quiver_select_none_btn = button;
                             break;
+                        case 'Zoom in':
+                            quiver_zoom_in_btn = button;
+                            break;
+                        case 'Zoom out':
+                            quiver_zoom_out_btn = button;
+                            break;
+                        case 'Reset zoom':
+                            quiver_reset_zoom_btn = button;
+                            break;
+                        case 'Centre view':
+                            quiver_center_view_btn = button;
+                            break;
                         default:
                             break;
                     }
@@ -60,6 +76,24 @@
         });       
        
     });
+    
+    function zoom_in() {
+        quiver_zoom_in_btn.click();
+    }
+    
+    function zoom_out() {
+        quiver_zoom_out_btn.click();
+    }
+    
+    function reset_zoom()
+    {
+        quiver_reset_zoom_btn.click();
+    }
+    
+    function center_view()
+    {
+        quiver_center_view_btn.click();
+    }
     
     function select_none()
     {

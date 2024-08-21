@@ -111,9 +111,25 @@
            </a>
           </div>
          </div>
-         <a class="dropdown-item" data-bs-target="#zoom-options-modal" data-bs-toggle="modal" href='{% static "#" %}'>
-          Zoom
-         </a>
+         <div class="nav-item dropstart" id="zoom-dropdown-item" style="padding-bottom: 0px;text-decoration: none;margin-bottom: 2px;padding-left: 12px;padding-top: 4px;">
+          <a aria-expanded="false" class="dropdown-toggle" data-bs-auto-close="outside" data-bs-toggle="dropdown" href='{% static "#" %}' style="text-decoration: none;margin-left: 0px;padding-left: 0px;">
+           Zoom
+          </a>
+          <div class="dropdown-menu dropdown-menu-start dropdown-menu-dark" id="zoom-dropdown-menu" style="box-shadow: 3px 3px 14px black;">
+           <a class="dropdown-item" data-bs-placement="left" data-bs-toggle="tooltip" data-bss-tooltip="" onclick="zoom_out();" title="Ctrl+-">
+            Out
+           </a>
+           <a class="dropdown-item" data-bs-placement="left" data-bs-toggle="tooltip" data-bss-tooltip="" onclick="zoom_in();" title="Ctrl+=">
+            In
+           </a>
+           <a class="dropdown-item" data-bs-placement="left" data-bs-toggle="tooltip" data-bss-tooltip="" onclick="center_view();" title="G">
+            Center
+           </a>
+           <a class="dropdown-item" onclick="reset_zoom();">
+            Reset
+           </a>
+          </div>
+         </div>
          <a class="dropdown-item" data-bs-target="#settings-modal" data-bs-toggle="modal" href='{% static "#" %}'>
           Settings
          </a>
