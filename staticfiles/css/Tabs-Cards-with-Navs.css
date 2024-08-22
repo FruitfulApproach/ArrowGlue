@@ -1,0 +1,15 @@
+.nav-tabs .nav-link.active {
+  border: solid var(--bs-success-border-subtle);
+  border-width: 0 0 3px 0;
+  font-weight: bold;
+}
+
+.nav-tabs .nav-link {
+  color: var(--bs-tertiary-color);
+  padding: 1rem;
+}
+
+.tab-pane {
+  padding: 1rem;
+}
+
