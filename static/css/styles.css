@@ -4,9 +4,3 @@
   }
 }
 
-@media only screen {
-  .disable-tooltip-on-mobile {
-    display: none !important;
-  }
-}
-

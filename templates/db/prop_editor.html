@@ -30,7 +30,7 @@
  <body>
   <nav class="navbar navbar-expand-lg navigation-clean-button navbar-light is-fixed" id="main-navbar" style="width: 100%;height: auto;max-height: auto;padding: 0px;">
    <div class="container-fluid">
-    <a class="navbar-brand d-flex flex-row align-items-center bounce animated" style="margin: 0px;padding: 0px;width: 153.6094px;font-family: 'Indie Flower', serif;">
+    <a class="navbar-brand d-flex flex-row align-items-center bounce animated" href="{% url 'db_index' %}" style="margin: 0px;padding: 0px;width: 153.6094px;font-family: 'Indie Flower', serif;">
      <img height="36" src='{% static "img/android-chrome-192x192.png" %}' style="margin-bottom: 5px;padding-left: 0px;margin-left: -6px;margin-right: 11px;" width="36"/>
      <br/>
      <strong>
@@ -49,7 +49,7 @@
     <div class="collapse navbar-collapse d-lg-flex justify-content-lg-end align-items-lg-center" id="navcol-1" style="margin-bottom: 0px;margin-top: 1px;height: 53px;padding-left: 0px;margin-left: -151px;">
      <ul class="navbar-nav d-lg-flex me-auto justify-content-lg-end align-items-lg-center ms-auto" style="float: right;">
       <li class="nav-item d-lg-flex justify-content-lg-end align-items-lg-center">
-       <button class="btn btn-primary text-nowrap text-center d-flex float-end justify-content-lg-end align-items-lg-center navbar-main-link" data-bs-placement="bottom" data-bs-toggle="tooltip" data-bss-hover-animate="pulse" data-bss-tooltip="" id="save-button" onclick="save_prop();" title="Ctrl+S" type="button">
+       <button class="btn btn-primary text-nowrap text-center d-flex float-end justify-content-lg-end align-items-lg-center navbar-main-link" data-bss-hover-animate="pulse" id="save-button" onclick="save_prop();" title="Ctrl+S" type="button">
         <svg class="bi bi-cloud-upload navbar-main-icon" fill="currentColor" height="1em" viewbox="0 0 16 16" width="1em" xmlns="http://www.w3.org/2000/svg">
          <path d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z" fill-rule="evenodd">
          </path>
@@ -62,7 +62,7 @@
        </button>
       </li>
       <li class="nav-item d-lg-flex justify-content-lg-end align-items-lg-center">
-       <button class="btn btn-primary text-nowrap text-center d-flex float-end justify-content-lg-end align-items-lg-center navbar-main-link" data-bs-custom-class="disable-tooltip-on-mobile" data-bs-placement="bottom" data-bs-toggle="tooltip" data-bss-hover-animate="pulse" data-bss-tooltip="" id="undo-button" onclick="undo();" title="Ctrl+Z" type="button">
+       <button class="btn btn-primary text-nowrap text-center d-flex float-end justify-content-lg-end align-items-lg-center navbar-main-link" data-bss-hover-animate="pulse" id="undo-button" onclick="undo();" title="Ctrl+Z" type="button">
         <svg class="bi bi-arrow-90deg-left navbar-main-icon" fill="currentColor" height="1em" viewbox="0 0 16 16" width="1em" xmlns="http://www.w3.org/2000/svg">
          <path d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4z" fill-rule="evenodd">
          </path>
@@ -73,7 +73,7 @@
        </button>
       </li>
       <li class="nav-item d-lg-flex justify-content-lg-end align-items-lg-center">
-       <button class="btn btn-primary text-nowrap text-center d-flex float-end justify-content-lg-end align-items-lg-center navbar-main-link" data-bs-placement="bottom" data-bs-toggle="tooltip" data-bss-hover-animate="pulse" data-bss-tooltip="" id="redo-button" onclick="redo();" title="Shift+Ctrl+Z" type="button">
+       <button class="btn btn-primary text-nowrap text-center d-flex float-end justify-content-lg-end align-items-lg-center navbar-main-link" data-bss-hover-animate="pulse" id="redo-button" onclick="redo();" title="Shift+Ctrl+Z" type="button">
         <svg class="bi bi-arrow-90deg-right navbar-main-icon" fill="currentColor" height="1em" viewbox="0 0 16 16" width="1em" xmlns="http://www.w3.org/2000/svg">
          <path d="M14.854 4.854a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 4H3.5A2.5 2.5 0 0 0 1 6.5v8a.5.5 0 0 0 1 0v-8A1.5 1.5 0 0 1 3.5 5h9.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4z" fill-rule="evenodd">
          </path>
@@ -84,7 +84,7 @@
        </button>
       </li>
       <li class="nav-item d-lg-flex justify-content-lg-end align-items-lg-center">
-       <button class="btn btn-primary text-nowrap text-center d-flex float-end justify-content-lg-end align-items-lg-center navbar-main-link" data-bs-placement="bottom" data-bs-toggle="tooltip" data-bss-hover-animate="pulse" data-bss-tooltip="" id="delete-button" onclick="delete_selected();" title="Del key" type="button">
+       <button class="btn btn-primary text-nowrap text-center d-flex float-end justify-content-lg-end align-items-lg-center navbar-main-link" data-bss-hover-animate="pulse" id="delete-button" onclick="delete_selected();" title="Del key" type="button">
         <svg class="bi bi-trash3 navbar-main-icon" fill="currentColor" height="1em" viewbox="0 0 16 16" width="1em" xmlns="http://www.w3.org/2000/svg">
          <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5">
          </path>
@@ -115,10 +115,10 @@
            Select
           </a>
           <div class="dropdown-menu dropdown-menu-start dropdown-menu-dark" id="select-dropdown-menu" style="box-shadow: 3px 3px 14px black;">
-           <a class="dropdown-item" data-bs-placement="left" data-bs-toggle="tooltip" data-bss-tooltip="" onclick="select_all();" title="Ctrl+A">
+           <a class="dropdown-item" onclick="select_all();" title="Ctrl+A">
             All
            </a>
-           <a class="dropdown-item" data-bs-placement="left" data-bs-toggle="tooltip" data-bss-tooltip="" onclick="select_none();" title="Shift+Ctrl+A">
+           <a class="dropdown-item" onclick="select_none();" title="Shift+Ctrl+A">
             None
            </a>
           </div>
@@ -128,13 +128,13 @@
            Zoom
           </a>
           <div class="dropdown-menu dropdown-menu-start dropdown-menu-dark" id="zoom-dropdown-menu" style="box-shadow: 3px 3px 14px black;">
-           <a class="dropdown-item" data-bs-placement="left" data-bs-toggle="tooltip" data-bss-tooltip="" onclick="zoom_out();" style="padding-bottom: 0px;padding-top: 0px;margin-bottom: 4px;margin-top: 5px;" title="Ctrl+-">
+           <a class="dropdown-item" onclick="zoom_out();" style="padding-bottom: 0px;padding-top: 0px;margin-bottom: 4px;margin-top: 5px;" title="Ctrl+-">
             Out
            </a>
-           <a class="dropdown-item" data-bs-placement="left" data-bs-toggle="tooltip" data-bss-tooltip="" onclick="zoom_in();" title="Ctrl+=">
+           <a class="dropdown-item" onclick="zoom_in();" title="Ctrl+=">
             In
            </a>
-           <a class="dropdown-item" data-bs-placement="left" data-bs-toggle="tooltip" data-bss-tooltip="" onclick="center_view();" title="G">
+           <a class="dropdown-item" onclick="center_view();" title="G">
             Center
            </a>
            <a class="dropdown-item" onclick="reset_zoom();">
