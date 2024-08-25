@@ -22,6 +22,10 @@
     var quiver_reset_zoom_btn = null;
     var quiver_center_view_btn = null;
     var quiver_flip_arrows_btn = null;
+    var quiver_left_align_labels_btn = null;
+    var quiver_right_align_labels_btn = null;
+    var quiver_clear_align_labels_btn = null;
+    var quiver_over_align_labels_btn = null;
     
     document.addEventListener("DOMContentLoaded", function(event) { 
         quiver_frame = document.getElementById("quiver-frame");
@@ -87,9 +91,75 @@
                     }
                 }
             }
+            
+            var inputs = quiver_frame.contentWindow.document.getElementsByTagName("input");
+            
+            for (var i = 0; i < buttons.length; i++)
+            {
+                var input = inputs[i];
+                
+                if (input.hasAttribute('title'))
+                {
+                    var title = input.getAttribute('title');
+                    
+                    switch (title)
+                    {
+                        case 'Left align label':
+                            quiver_left_align_labels_btn = input;
+                            break;
+                        case 'Right align label':
+                            quiver_right_align_labels_btn = input;
+                            break;
+                        case 'Centre align label (clear)':
+                            quiver_clear_align_labels_btn = input;
+                            break;
+                        case 'Centre align label (over)':
+                            quiver_over_align_labels_btn = input;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
         });       
        
     });
+    
+    function prepare_arrow_style_defaults()
+    {
+        if (quiver_left_align_labels_btn.checked)
+        {
+            $("#left-align-label-radio").prop('checked', true);
+        }
+        else if (quiver_clear_align_labels_btn.checked)
+        {
+            $("#clear-align-label-radio").prop('checked', true);
+        }
+        else if (quiver_over_align_labels_btn.checked)
+        {
+            $("#over-align-label-radio").prop('checked', true);
+        }
+        else if (quiver_right_align_labels_btn.checked)
+        {
+            $("#right-align-label-radio").prop('checked', true);
+        }
+    }
+    
+    function left_align_labels() {
+        quiver_left_align_labels_btn.click();
+    }
+    
+    function right_align_labels() {
+        quiver_right_align_labels_btn.click();
+    }
+    
+    function over_align_labels() {
+        quiver_over_align_labels_btn.click();
+    }
+    
+    function clear_align_labels() {
+        quiver_clear_align_labels_btn.click();
+    }
     
     function flip_arrows() {
         quiver_flip_arrows_btn.click();
