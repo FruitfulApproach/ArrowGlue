@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['arrowglue-dd35800b80e8.herokuapp.com', 'localhost']
 
@@ -135,8 +135,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 DATABASE_ENGINE='sqlite3'
@@ -144,11 +146,6 @@ DATABASE_NAME=r'C:/Users/fruit/OneDrive/Desktop/Code/WebDev/__CURRENT/ArrowGlue/
 
 MAX_DB_TEXT_LENGTH = 256
 MAX_USERNAME_LENGTH = 64
-
-# Production security settings.  
-# See: https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-CSRF_COOKIE_SECURE = True # Set this to True to avoid transmitting the CSRF cookie over HTTP accidentally.
-SESSION_COOKIE_SECURE = True # Set this to True to avoid transmitting the session cookie over HTTP accidentally.
 
 # Allow Wing Pro to stop on exceptions and debug templates, when it is present
 

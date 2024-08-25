@@ -21,6 +21,7 @@
     var quiver_zoom_out_btn = null;
     var quiver_reset_zoom_btn = null;
     var quiver_center_view_btn = null;
+    var quiver_flip_arrows_btn = null;
     
     document.addEventListener("DOMContentLoaded", function(event) { 
         quiver_frame = document.getElementById("quiver-frame");
@@ -72,10 +73,27 @@
                             break;
                     }
                 }
+                else if (button.hasAttribute('title')) 
+                {
+                    var btn_title = button.getAttribute('title');
+                    
+                    switch (btn_title)
+                    {
+                        case 'Flip arrows':
+                            quiver_flip_arrows_btn = button;
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         });       
        
     });
+    
+    function flip_arrows() {
+        quiver_flip_arrows_btn.click();
+    }
     
     function zoom_in() {
         quiver_zoom_in_btn.click();
