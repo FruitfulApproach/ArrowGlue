@@ -23,6 +23,10 @@ _https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/_
  https://docs.djangoproject.com/en/5.1/ref/settings/#std-setting-EMAIL_BACKEND
 4. Get notified of site errors: 
  LOGGING / ADMINS / MANAGERS settings
+5. Read through the Whitenoise + Django article:
+ https://whitenoise.readthedocs.io/en/stable/django.html
+6. Change the secret key in the environment vars both in the local .wpu (Wing project user file)
+as well as Heroku app's settings.
  
 ### Performance considerations:
 1. Consider using cached sessions to improve performance.
