@@ -20,9 +20,11 @@
   <link href='{% static "assets/css/Font%20Awesome%206%20Free.css" %}' rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css?family=Ribeye+Marrow&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" rel="stylesheet"/>
   <link href='{% static "css/Custom-Quiver-Navbar.css" %}' rel="stylesheet"/>
   <link href='{% static "css/Navbar-Right-Links-icons.css" %}' rel="stylesheet"/>
+  <link href='{% static "css/styles.css" %}' rel="stylesheet"/>
   <link href='{% static "css/Tabs-Panel.css" %}' rel="stylesheet"/>
  </head>
  <body>
@@ -60,7 +62,7 @@
        </button>
       </li>
       <li class="nav-item d-lg-flex justify-content-lg-end align-items-lg-center">
-       <button class="btn btn-primary text-nowrap text-center d-flex float-end justify-content-lg-end align-items-lg-center navbar-main-link" data-bs-placement="bottom" data-bs-toggle="tooltip" data-bss-hover-animate="pulse" data-bss-tooltip="" id="undo-button" onclick="undo();" title="Ctrl+Z" type="button">
+       <button class="btn btn-primary text-nowrap text-center d-flex float-end justify-content-lg-end align-items-lg-center navbar-main-link" data-bs-custom-class="disable-tooltip-on-mobile" data-bs-placement="bottom" data-bs-toggle="tooltip" data-bss-hover-animate="pulse" data-bss-tooltip="" id="undo-button" onclick="undo();" title="Ctrl+Z" type="button">
         <svg class="bi bi-arrow-90deg-left navbar-main-icon" fill="currentColor" height="1em" viewbox="0 0 16 16" width="1em" xmlns="http://www.w3.org/2000/svg">
          <path d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4z" fill-rule="evenodd">
          </path>
@@ -170,14 +172,14 @@
    <div class="modal-dialog" role="document">
     <div class="modal-content">
      <div class="modal-header border-0">
-      <h4 class="modal-title">
+      <h4 class="modal-title" style="color: var(--bs-light-text-emphasis);">
        About
       </h4>
       <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button">
       </button>
      </div>
      <div class="modal-body">
-      <p class="border-0">
+      <p class="border-0" style="color: var(--bs-body-color);">
        The original editor is called Quiver and it is maintained by
        <br/>
        <a href="https://github.com/varkor">
@@ -206,32 +208,69 @@
   {% include 'db/quiver_editor_include.html' %}
   <div class="offcanvas offcanvas-start" id="arrow-style-offcanvas" tabindex="-1">
    <div class="offcanvas-header">
-    <h5 class="offcanvas-title">
+    <h5 class="offcanvas-title" style="font-weight: bold;">
      Arrow Style
     </h5>
     <button aria-label="Close" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#arrow-style-offcanvas" type="button">
     </button>
    </div>
    <div class="offcanvas-body">
+    <div class="block block-rounded" id="tab_panel-1">
+     <ul class="nav nav-tabs nav-tabs-block" role="tablist">
+      <li class="nav-item" role="presentation">
+       <button aria-controls="btabs-static-home" aria-selected="true" class="nav-link active" data-bs-target="#btabs-static-home-tab" data-bs-toggle="tab" id="btabs-static-home" role="tab" type="button">
+        Home
+       </button>
+      </li>
+      <li class="nav-item" role="presentation">
+       <button aria-controls="btabs-static-profile-tab" aria-selected="true" class="nav-link" data-bs-target="#btabs-static-profile-tab" data-bs-toggle="tab" id="btabs-static-profile" role="tab" type="button">
+        Profile
+       </button>
+      </li>
+      <li class="nav-item ms-auto" role="presentation">
+       <button aria-controls="btabs-static-options-tab" aria-selected="true" class="nav-link" data-bs-target="#btabs-static-options-tab" data-bs-toggle="tab" id="btabs-static-options" role="tab" type="button">
+        <i class="fa fa-cog">
+        </i>
+       </button>
+      </li>
+     </ul>
+     <div class="block-content tab-content">
+      <div aria-labelledby="btabs-static-home" class="active show tab-pane" id="btabs-static-home-tab" role="tabpanel" tabindex="0">
+       <h4 class="fw-normal">
+        Home Content
+       </h4>
+      </div>
+      <p>
+       lorem ipsum
+      </p>
+      <div aria-labelledby="btabs-static-profile" class="tab-pane" id="btabs-static-profile-tab" role="tabpanel" tabindex="0">
+       <h4 class="fw-normal">
+        Profile Content
+       </h4>
+      </div>
+      <div aria-labelledby="btabs-static-options" class="tab-pane" id="btabs-static-options-tab" role="tabpanel" tabindex="0">
+       <h4 class="fw-normal">
+        Options Content
+       </h4>
+      </div>
+     </div>
+    </div>
     <div class="block block-rounded" id="tab_panel">
      <ul class="bg-primary-subtle nav nav-tabs nav-tabs-block" role="tablist">
       <li class="nav-item" role="presentation">
-       <button aria-controls="label-pos-page" aria-selected="true" class="nav-link active" data-bs-target="#label-pos-page" data-bs-toggle="tab" id="label-pos-tab" role="tab" type="button">
+       <button aria-controls="label-pos-tab" aria-selected="true" class="nav-link active" data-bs-target="#label-pos-page" data-bs-toggle="tab" id="label-pos-tab" role="tab" style="font-weight: bold;border-top-right-radius: 0px;border-bottom-right-radius: 0px;" type="button">
         Label Position
        </button>
       </li>
       <li class="nav-item" role="presentation">
-       <button aria-controls="page2" aria-selected="true" class="nav-link" data-bs-target="#page2" data-bs-toggle="tab" id="tab2" role="tab" type="button">
+       <button aria-controls="page2" aria-selected="true" class="nav-link" data-bs-target="#page2" data-bs-toggle="tab" id="tab2" role="tab" style="color: var(--bs-body-color);font-weight: bold;border-top-left-radius: 0px;border-top-right-radius: 6px;" type="button">
         Profile
        </button>
       </li>
      </ul>
      <div class="block-content tab-content">
-      <div aria-labelledby="btabs-static-home" class="active show tab-pane" id="label-pos-page" role="tabpanel" tabindex="0">
-       <label class="form-label" for="label-align-radio-group" style="margin-bottom: 0px;margin-right: 11px;">
-        Alignment:
-       </label>
-       <div aria-label="Basic radio toggle button group" class="btn-group" id="label-align-radio-group" role="group">
+      <div aria-labelledby="btabs-static-home" class="active show d-lg-flex align-items-lg-center tab-pane" id="label-pos-page" role="tabpanel" style="margin-bottom: 16px;" tabindex="0">
+       <div aria-label="Basic radio toggle button group" class="d-lg-flex align-items-lg-center btn-group" id="label-align-radio-group" role="group" style="padding-bottom: 8px;margin-bottom: -19px;">
         <input autocomplete="off" checked="" class="btn-check" id="left-align-label-radio" name="btnradio" onclick="left_align_labels();" type="radio"/>
         <label class="form-label btn btn-outline-primary" for="left-align-label-radio">
          Left
