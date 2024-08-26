@@ -37,7 +37,7 @@ def save_prop(request):
     return JsonResponse(data, safe=False)
 
 
-def prop_editor(request):
+def sketch_editor(request):
     prop = Prop()
     prop.save()
     
@@ -45,7 +45,7 @@ def prop_editor(request):
         'prop_id' : prop.uid,       
     }
     
-    return render(request, 'db/prop_editor.html', context=data)
+    return render(request, 'db/sketch_editor.html', context=data)
 
 
 def test1(request):
