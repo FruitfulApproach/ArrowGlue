@@ -1,6 +1,6 @@
 bidict==0.22.1
 Django==5.1
-neomodel==5.1.0
+neomodel==5.3.3
 django_neomodel==0.1.1
 django-crispy-forms==2.1
 crispy-bootstrap5==2023.10		
