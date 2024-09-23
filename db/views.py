@@ -417,7 +417,7 @@ def edit_definition(request, definition_id: str):
         return render(request, "db/define.html", context)
     
     except Exception as e:
-        if __debug__:
-            raise e
+        #if __debug__:
+            #raise e
         return error(error_txt=traceback.format_exc())
         
