@@ -1,21 +1,20 @@
 {% load static %}
 
 
-<div class="card prop-card" style="margin-top:32px;margin-bottom:23px;width:auto">
-    <div class="card-body" style="width:auto">            
-        <h5 class="card-title">{{prop.title}}</h4>        
-        
+<div class="card" style="width:auto">
+    <div class="card-body prop-card">
+        <h5 class="card-title">{{prop.title}}</h4> 
+      
         <iframe class="quiver-embed" 
-            src="{% static 'quiver/src/index.html' %}#q={{ prop.preview_base64 }}&embed" 
-            style="width:100%;min-width:325px;height:100%;min-height:325px;margin:0; border-radius:8px;border:1px solid gray;overflow:hidden;"></iframe>       
-        
-        <div class="d-flex" style="margin-top:14px">
+          src="{% static 'quiver/src/index.html' %}#q={{ prop.preview_base64 }}&embed" 
+          style="width:auto;height:auto;min-height:380px;min-width:380px;border-radius:8px;border:none;overflow:hidden;"></iframe>       
+          
+        <div class="d-flex">
             <a class="btn btn-primary prop-btn" style="position:absolute;right:4%;bottom:2%;"
                 href="{% url 'sketch_editor'  prop.uid %}">Edit ✏</a>
             <div>
                 <p class="fw-bold mb-0">By {{ prop.maintainer }}</p>                    
             </div>
         </div>
-        
     </div>
 </div>

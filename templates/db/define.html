@@ -27,10 +27,8 @@
   <link href='{% static "css/Tabs-Panel.css" %}' rel="stylesheet"/>
  </head>
  <body style="/*width: 100%;*/padding-top: 0px;">
-  <div style="top:-32px;position:relative;">
-   {% include 'messages.html' %}
-  </div>
-  <nav class="navbar navbar-expand-md fixed-top bg-success py-0" style="position: fixed;width: 100%;z-index:1">
+  {% include 'messages.html' %}
+  <nav class="navbar navbar-expand-md fixed-top bg-success py-0" style="position: sticky;width: 100%;z-index: 1;">
    <div class="container-fluid">
     <a class="navbar-brand d-flex align-items-center bounce animated" href="{% url 'db_index' %}" style="font-family: 'Indie Flower', serif;font-size: 26px;padding-top: 0px;padding-bottom: 0px;">
      <br/>
@@ -71,16 +69,16 @@
     </div>
    </div>
   </nav>
-  <div class="container-fluid d-flex d-sm-flex flex-column justify-content-center flex-wrap justify-content-sm-center py-4 py-xl-5" id="implication-chain-cards" style="width: auto;margin-left: auto;margin-right: auto;margin-bottom: -25px;margin-top: 32px;">
-   <div class="row" id="implication-chain-card-list">
+  <div class="container-fluid py-4 py-xl-5" id="implication-chain-cards" style="padding-top: 0px;margin-top: -36px;margin-bottom: -75px;">
+   <div class="row gx-3 gy-3 row-cols-1 row-cols-md-2 row-cols-xl-3" id="implication-chain-card-list">
     {% for prop in implication_chain %}
-    <div class="col-12">
+    <div class="col">
      {% include 'db/quiver_preview_include.html' %}
     </div>
     {% endfor %}
    </div>
-   <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3" style="position: static;padding-top: 0px;margin: 10px;padding-bottom: 0px;margin-top: -6px;margin-bottom: 44px;">
-    <div class="col" style="margin: 12px;padding: 0;padding-left: 6px;margin-left: -13px;position: absolute;display: inline-flex;padding-bottom: 0px;padding-top: 3px;margin-bottom: 60px;margin-top: 8px;">
+   <div class="row g-0" style="position: static;">
+    <div class="col align-self-center" style="margin-bottom: -9px;margin-top: 8px;padding-bottom: 18px;">
      <button class="btn btn-primary edit-button" data-bs-toggle="tooltip" data-bss-tooltip="" onclick="add_sketch();" style="margin-right: 8px;margin-left: 6px;" title="(Let)" type="button">
       Add Sketch
      </button>
@@ -91,9 +89,9 @@
    </div>
   </div>
   <div class="container-fluid" style="margin-top: 5px;">
-   <div class="row" style="margin-top: 23px;">
-    <div class="col" style="padding-top: 0px;margin-top: -9px;">
-     <p class="w-lg-50" style="margin-bottom: -1px;padding-top: 0px;margin-top: 0px;">
+   <div class="row g-0" style="margin-top: 23px;">
+    <div class="col">
+     <p class="text-secondary-emphasis w-lg-50">
       Author: {{ definition.maintainer }}
       <br/>
       Created: {{ definition.creation_datetime }}

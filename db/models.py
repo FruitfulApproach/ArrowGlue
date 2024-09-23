@@ -212,23 +212,23 @@ class RightAssocImplies(Arrow):
 
         
 class Proposition(Object, AuthoredContent):
-    PROP_TYPES = bidict({ 0: 'sketch', 1: 'definition',})
+    #PROP_TYPES = bidict({ 0: 'sketch', 1: 'definition',})
     
     logic_negated = BooleanProperty(default=False)
-    type_ = IntegerProperty(choices=PROP_TYPES, default=0)
+    #type_ = IntegerProperty(choices=PROP_TYPES, default=0)
 
     @property
     def preview_base64(self):
         raise NotImplementedError
     
-    @staticmethod
-    def factory_inflate(node):
-        prop = Proposition.inflate(node)
+    #@staticmethod
+    #def factory_inflate(node):
+        #prop = Proposition.inflate(node)
         
-        if prop.type_ == Proposition.PROP_TYPES.inv['sketch']:
-            return Sketch.inflate(node)
-        else:
-            return Definition.inflate(node)
+        #if prop.type_ == Proposition.PROP_TYPES.inv['sketch']:
+            #return Sketch.inflate(node)
+        #else:
+            #return Definition.inflate(node)
         
         
 class Proof(Object, AuthoredContent):

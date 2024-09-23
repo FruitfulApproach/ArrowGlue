@@ -403,8 +403,7 @@ def edit_definition(request, definition_id: str):
                 
                 for path in paths:
                     for node in path.nodes:
-                        prop = Proposition.factory_inflate(node)
-                        implication_chain.append(prop)
+                        implication_chain.append(node)
                     break
             else:
                 implication_chain = [start]
@@ -417,7 +416,7 @@ def edit_definition(request, definition_id: str):
         return render(request, "db/define.html", context)
     
     except Exception as e:
-        #if __debug__:
-            #raise e
+        if __debug__:
+            raise e
         return error(error_txt=traceback.format_exc())
         
