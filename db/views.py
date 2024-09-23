@@ -7,6 +7,7 @@ import base64
 import json
 from django.contrib import messages
 from django.template.loader import render_to_string
+import traceback
 
 
 def save_definition_title(request):
@@ -99,7 +100,7 @@ def sketch_editor(request, sketch_id: str):
     except Exception as e:
         if __debug__:
             raise e
-        return error(error_txt=str(e))
+        return error(error_txt=traceback.format_exc())
         
 
 
@@ -248,7 +249,7 @@ def edit_statement(request, statement_id: str):
     except Exception as e:
         if __debug__:
             raise e
-        return redirect(reverse('error', kwargs={'error_txt': str(e),}))
+        return error(error_txt=traceback.format_exc())
     
     
 
@@ -416,7 +417,7 @@ def edit_definition(request, definition_id: str):
         return render(request, "db/define.html", context)
     
     except Exception as e:
-        #if __debug__:
-            #raise e
-        return error(str(e))
+        if __debug__:
+            raise e
+        return error(error_txt=traceback.format_exc())
         
