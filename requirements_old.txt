@@ -1,0 +1,8 @@
+neomodel
+django_neomodel
+django-crispy-forms
+crispy-bootstrap5
+gunicorn
+whitenoise
+django-bootstrap5
+bidict
