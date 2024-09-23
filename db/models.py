@@ -220,7 +220,7 @@ class Proposition(Object, AuthoredContent):
     
     @staticmethod
     def factory_inflate(node):
-        if 'Sketch' in node.labels():
+        if 'Sketch' in set(node.labels()):
             return Sketch.inflate(node)
         else:
             return Definition.inflate(node)
