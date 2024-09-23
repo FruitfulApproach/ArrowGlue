@@ -97,18 +97,27 @@ proj.directory-list = [{'dirloc': loc('.'),
                         'filter': '*',
                         'include_hidden': False,
                         'recursive': True,
+                        'watch_for_changes': True},
+                       {'dirloc': loc('db'),
+                        'excludes': (),
+                        'filter': '*',
+                        'include_hidden': False,
+                        'recursive': True,
                         'watch_for_changes': True}]
 proj.file-list = [loc('static/img/favicon.ico')]
 proj.file-type = 'shared'
-proj.launch-config = {loc('db/models.py'): ('project',
+proj.launch-config = {loc('db/language.py'): ('project',
         ('',
          'launch-8CBqACP6z2yRuzEt')),
-                      loc('db/text_lang.py'): ('project',
+                      loc('db/models.py'): ('project',
         ('',
          'launch-8CBqACP6z2yRuzEt')),
                       loc('manage.py'): ('custom',
         ('',
-         'launch-KmLsdQmB1xGeFHep'))}
+         'launch-KmLsdQmB1xGeFHep')),
+                      loc('primes.py'): ('project',
+        ('',
+         'launch-8CBqACP6z2yRuzEt'))}
 proj.main-file = loc('manage.py')
 proj.ptype = 'django'
 testing.test-framework = {None: ':internal djangotest',

@@ -1,0 +1,8 @@
+#title-row #edit-title-btn {
+  display: none;
+}
+
+#title-row:hover #edit-title-btn {
+  display: inline-flex;
+}
+

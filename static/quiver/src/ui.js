@@ -1,5 +1,7 @@
 "use strict";
 
+var quiver_ui = null;  // ArrowGlue (+)
+
 /// Various parameters.
 Object.assign(CONSTANTS, {
     /// The current quiver version.
@@ -7708,6 +7710,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // The global UI.
     const body = new DOM.Element(document.body);
     const ui = new UI(body);
+    
+    quiver_ui = ui;   // ArrowGlue (+)
+    
     ui.initialise();
 
     const load_quiver_from_query_string = () => {

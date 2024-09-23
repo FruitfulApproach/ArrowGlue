@@ -2,14 +2,13 @@
 
 <iframe sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals"
     src='{% static "quiver/src/index.html" %}' 
-    style="height:96vh;width:100%;border:none;overflow:hidden;"
+    style="position:absolute;z-index:-1;height:96vh;width:100%;border:none;overflow:hidden;"
     id="quiver-frame">
 </iframe>
     
 <script type="text/javascript">
-    var prop_id = "{{ prop_id }}";
-    
-      //find iframe
+    var sketch_id = "{{ sketch.uid }}";
+    var quiver_ui = null;
     var quiver_frame = null; 
     var quiver_save_btn = null;
     var quiver_undo_btn = null;
@@ -29,6 +28,12 @@
     
     document.addEventListener("DOMContentLoaded", function(event) { 
         quiver_frame = document.getElementById("quiver-frame");
+        
+        quiver_frame.addEventListener("load", function(event) {
+            quiver_ui = quiver_frame.contentWindow['quiver_ui'];
+        });
+        
+        quiver_frame.contentWindow.location.href += "#q={{ quiver_base64 }}";
         
         quiver_frame.addEventListener("load", function() {      
             var buttons = quiver_frame.contentWindow.document.getElementsByTagName("button");             
@@ -124,7 +129,7 @@
         });       
        
     });
-    
+
     function prepare_arrow_style_defaults()
     {
         if (quiver_left_align_labels_btn.checked)
@@ -206,38 +211,46 @@
         quiver_delete_btn.click();
     }
         
-    function save_prop() {
-        quiver_frame.contentWindow.location.href = '{{ request.path }}';
-        quiver_save_btn.click();        
+    function save_sketch() 
+    {
+        if (! quiver_ui.quiver.is_empty())
+        {
+            var start_url = quiver_frame.contentWindow.location.href;
+            
+            if (start_url.indexOf("#q="))
+            {
+                start_url = start_url.split("#q=")[0];
+            }
+                    
+            quiver_save_btn.click();
+                   
+            do { } while (start_url == quiver_frame.contentWindow.location.href);
+        }
         
-        var json_data = null;
-        
-        do {
-            var save_data = quiver_frame.contentWindow.location.href;            
-        } 
-        while (save_data == '{{ request.path }}');
+        json_data = null;
+        var save_data = quiver_frame.contentWindow.location.href;
         
         if (save_data.indexOf("#q=") != -1)
         {
-            var base_url = save_data.split("#q=");
+            base_url = save_data.split("#q=");
             json_data = base_url[1];
             base_url = base_url[0];
             
             json_data = {
-                'prop_id' : prop_id,
+                'sketch_id' : sketch_id,
                 'json_data' : json_data,
             }            
         }
         else {
             json_data = {
-                'prop_id': prop_id,
+                'sketch_id': sketch_id,
                 'json_data' : '',
             }
         }    
         
         $.ajax({
             type: "POST",
-            url: "{% url 'save_prop' %}",
+            url: "{% url 'save_sketch' %}",
             
             data: {
                  csrfmiddlewaretoken: "{{ csrf_token }}",
@@ -247,6 +260,12 @@
             success: function (response) {
                 // save_prop service's response:
                 console.log(response);
+                display_django_messages();
+            },
+            
+            error: function (response) {
+                console.log(response);
+                display_django_messages();
             }
         });
     }

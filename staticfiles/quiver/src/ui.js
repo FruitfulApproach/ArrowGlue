@@ -6,9 +6,9 @@ Object.assign(CONSTANTS, {
     VERSION: "1.5.2",
     /// When the `quiver.sty` package was last modified.
     PACKAGE_VERSION: "2021/01/11",
-    /// We currently only support n-cells for (n ≤ 4). This restriction is not technical: it can be
+    /// We currently only support n-cells for (n â‰¤Â 4). This restriction is not technical: it can be
     /// lifted in the editor without issue. Rather, this is for usability: a user is unlikely to
-    /// want to draw a higher cell. For n-cells for n ≥ 3, we make use of tikz-nfold in exported
+    /// want to draw a higher cell. For n-cells for n â‰¥Â 3, we make use of tikz-nfold in exported
     /// diagrams.
     MAXIMUM_CELL_LEVEL: 4,
     /// The width of the dashed grid lines.
@@ -982,7 +982,7 @@ class UI {
                 new DOM.Element("li").add(
                     new DOM.Link(
                         "https://tex.stackexchange.com/users/138900/andr%c3%a9c",
-                        "AndréC",
+                        "AndrÃ©C",
                         true,
                     )
                 ).add(", for the custom TikZ style for curves of a fixed height."),
@@ -1041,7 +1041,7 @@ class UI {
                 "Double-click to create a new object.",
                 "Edit labels with the input bar at the bottom of the screen.",
                 "Click and drag the empty space around a object to move it around.",
-                "Hold Shift (⇧) to select multiple cells to edit them simultaneously."
+                "Hold Shift (â‡§) to select multiple cells to edit them simultaneously."
             ]));
         panes.push(welcome_pane);
         new DOM.Element("button").add("Get started").listen("click", () => {
@@ -3075,7 +3075,7 @@ class UI {
                 }
                 break;
 
-            // Adjunction (⊣).
+            // Adjunction (âŠ£).
             case "adjunction":
                 style.body_style = CONSTANTS.ARROW_BODY_STYLE.ADJUNCTION;
                 style.heads = CONSTANTS.ARROW_HEAD_STYLE.NONE;
@@ -3933,7 +3933,7 @@ class Panel {
         };
 
         // The button to reverse an edge.
-        add_button("Reverse arrows", "⇌ Reverse", "r", () => {
+        add_button("Reverse arrows", "â‡Œ Reverse", "r", () => {
             ui.history.add(ui, [{
                 kind: "reverse",
                 cells: ui.selection,
@@ -3941,7 +3941,7 @@ class Panel {
         });
 
         // The button to flip an edge.
-        add_button("Flip arrows", "⥮ Flip", "e", () => {
+        add_button("Flip arrows", "â¥® Flip", "e", () => {
             ui.history.add(ui, [{
                 kind: "flip",
                 cells: ui.selection,
@@ -3949,7 +3949,7 @@ class Panel {
         });
 
         // The button to flip a label.
-        add_button("Flip labels", "⥮ Flip labels", "f", () => {
+        add_button("Flip labels", "â¥® Flip labels", "f", () => {
             ui.history.add(ui, [{
                 kind: "flip labels",
                 cells: ui.selection,
@@ -5155,12 +5155,12 @@ class Panel {
                     note.add("Paste a ").add(new DOM.Code("tikz-cd"))
                         .add(" diagram below to load it into ")
                         .add(new DOM.Element("b").add("quiver"))
-                        .add(" ↴");
+                        .add(" â†´");
                 }
                 if (kind === "export") {
                     note.add("If you need to edit this diagram, you can open it again in ")
                         .add(new DOM.Element("b").add("quiver"))
-                        .add(" using the URL below ↴");
+                        .add(" using the URL below â†´");
                 }
 
                 // Update the import textarea/button.
@@ -5654,7 +5654,7 @@ class Panel {
                     consider("label_alignment", cell.options.label_alignment);
                     // The label alignment buttons are rotated to reflect the direction of the arrow
                     // when all arrows have the same direction (at least to the nearest multiple of
-                    // 90°). Otherwise, rotation defaults to 0°.
+                    // 90Â°). Otherwise, rotation defaults to 0Â°.
                     consider("{edge_angle}", cell.angle());
                     consider("{label_position}", cell.options.label_position);
                     consider("{offset}", cell.options.offset);
@@ -6138,7 +6138,7 @@ class Shortcuts {
     static components(combinations) {
         // By default, we display "Ctrl" and "Shift" as modifier keys, as most
         // operating systems use this to initiate keyboard shortcuts. For Mac
-        // and iOS, we switch to displaying "⌘" and "⇧". However, both keys
+        // and iOS, we switch to displaying "âŒ˜" and "â‡§". However, both keys
         // (on any operating system) work with the shortcuts: this is simply
         // used to work out what to display.
         const is_Apple_platform = Shortcuts.is_Apple_platform();
@@ -6152,16 +6152,16 @@ class Shortcuts {
                 key = key.toUpperCase();
             }
             const symbols = {
-                Backspace: "⌫",
-                Tab: "⇥",
-                Enter: "↵",
-                Shift: "⇧",
+                Backspace: "âŒ«",
+                Tab: "â‡¥",
+                Enter: "â†µ",
+                Shift: "â‡§",
                 Escape: "esc",
                 " ": "        ",
-                ArrowLeft: "←",
-                ArrowDown: "↓",
-                ArrowRight: "→",
-                ArrowUp: "↑",
+                ArrowLeft: "â†�",
+                ArrowDown: "â†“",
+                ArrowRight: "â†’",
+                ArrowUp: "â†‘",
                 Delete: "del",
                 Control: "ctrl",
                 Alt: "alt",
@@ -6169,10 +6169,10 @@ class Shortcuts {
             key = symbols[key] || key;
             const shortcut_keys = [key];
             if (shortcut.modifier) {
-                shortcut_keys.unshift(is_Apple_platform ? "⌘" : "ctrl");
+                shortcut_keys.unshift(is_Apple_platform ? "âŒ˜" : "ctrl");
             }
             if (shortcut.shift) {
-                shortcut_keys.unshift(is_Apple_platform ? "⇧" : "shift");
+                shortcut_keys.unshift(is_Apple_platform ? "â‡§" : "shift");
             }
             shortcuts_keys.push(shortcut_keys);
         }
@@ -7437,7 +7437,7 @@ class Edge extends Cell {
         this.initialise(ui);
     }
 
-    /// A set of defaults for edge options: a basic arrow (→).
+    /// A set of defaults for edge options: a basic arrow (â†’).
     static default_options(properties = null, style = null) {
         const options = {
             label_alignment: "left",
@@ -7708,6 +7708,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // The global UI.
     const body = new DOM.Element(document.body);
     const ui = new UI(body);
+    parent.quiver_ui = ui;
     ui.initialise();
 
     const load_quiver_from_query_string = () => {

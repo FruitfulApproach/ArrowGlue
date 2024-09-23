@@ -47,9 +47,27 @@ class TextLang:
             %import python.NAME
             %import common.WS
             %ignore WS
-        """)
+        """, parser='lalr')
         
         
+class SetOfAllVariables(Transformer):
+    LATIN_LETTER = str
+    var_content = ''.join
+    
+    def __init__(self, variables: set, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._variables:set = variables
+        
+    @property
+    def set_of_variables(self) -> set:
+        return self._variables
+    
+    def variable(self, tree):
+        print('Variable: ', tree)
+        var = tree[0]
+        self._variables.add(var)
+        return var
+    
         
 class SyntacticStandardForm(Transformer):
     INT = int
@@ -102,11 +120,24 @@ class SyntacticStandardForm(Transformer):
     
 if __name__ == '__main__':
     language = TextLang()
-    canon_form = SyntacticStandardForm()
+    #xformer = SyntacticStandardForm()
+    variables = set()
+    xformer = SetOfAllVariables(variables)
     
     while True:
         i = input("(╯‵□′)╯︵┻━┻ ")
         tree = language.parser.parse(i)
-        #print(tree)        
-        KaTeX_canonical = canon_form.transform(tree)
-        
+        print('Tree: ', tree)
+        result = xformer.transform(tree)
+        print('Result: ', result)
+        print('Variables: ', variables)
+   
+    #language = TextLang()
+    #xformer = SyntacticStandardForm()
+    
+    #while True:
+        #i = input("(╯‵□′)╯︵┻━┻ ")
+        #tree = language.parser.parse(i)
+        #print('Tree: ', tree)
+        #result = xformer.transform(tree)
+        #print('Result: ', result)

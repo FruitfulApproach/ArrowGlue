@@ -1,6 +1,54 @@
-@media only screen {
-  .tooltip {
-    display: none;
+#implication-chain-cards:hover #edit-button-group {
+  display: inline-flex;
+}
+
+#edit-button-group {
+  display: none;
+}
+
+#edit-title-area:hover #edit-title-btn {
+  display: flex;
+}
+
+#edit-title-btn {
+  display: none;
+}
+
+#edit-title-btn {
+  display: none;
+}
+
+.edit-button {
+  display: none;
+}
+
+#implication-chain-cards:hover .edit-button {
+  display: inline-flex;
+}
+
+.prop-card:hover .prop-btn {
+  display: inline-flex;
+}
+
+.prop-card:hover .prop-edit-btn {
+  display: inline-flex;
+}
+
+.prop-card:hover .prop-edit-btn {
+  display: inline-flex;
+}
+
+.prop-btn {
+  display: none;
+}
+
+#title-area:hover #edit-title-btn {
+  display: inline-flex;
+}
+
+@media (min-width:992px) {
+  #implication-chain-cardlist > .col {
+    margin-top: -23px;
   }
 }
 

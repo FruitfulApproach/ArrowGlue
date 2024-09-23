@@ -18,8 +18,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 import db
+import ArrowGlue.views as views
 
 urlpatterns = [
+    path("messages/", views.messages, name='messages'), 
+    path("clear-messages/", views.clear_messages, name='clear_messages'), 
     path("db/", include('db.urls')), 
     path("admin/", admin.site.urls),
 ]

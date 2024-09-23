@@ -48,11 +48,6 @@
   padding-top: 2px;
 }
 
-@media (min-width: 992px) {
-  .dropdown-menu {
-  }
-}
-
 @media (max-width: 991px) {
   .dropdown-menu {
     margin-left: -128px;
@@ -286,9 +281,6 @@
   color: #007bff;
 }
 
-a {
-}
-
 @media (max-width: 991px) {
   #select-dropdown-item {
     padding-left: 7px;
@@ -335,5 +327,8 @@ a {
   .main-nav-btn {
     margin: 2px;
   }
+}
+
+div {
 }
 

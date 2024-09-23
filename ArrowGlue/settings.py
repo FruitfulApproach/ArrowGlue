@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_bootstrap5",
     "django_neomodel",
     "db.apps.DbConfig",
     "crispy_forms",
@@ -88,8 +89,11 @@ DATABASES = {
     }
 }
 
-NEOMODEL_NEO4J_BOLT_URL = f"{os.environ['NEO4J_PROTOCOL']}://{os.environ['NEO4J_USERNAME']}" + \
-    f":{os.environ['NEO4J_PASSWORD']}@{os.environ['NEO4J_DOMAIN']}:{os.environ['NEO4J_PORT']}"
+if 'WORKSTATION_DEV' in os.environ and os.environ['WORKSTATION_DEV'] == '1':
+    NEOMODEL_NEO4J_BOLT_URL = os.environ['NEOMODEL_NEO4J_BOLT_URL']
+else:    
+    NEOMODEL_NEO4J_BOLT_URL = f"{os.environ['NEO4J_PROTOCOL']}://{os.environ['NEO4J_USERNAME']}" + \
+        f":{os.environ['NEO4J_PASSWORD']}@{os.environ['NEO4J_DOMAIN']}:{os.environ['NEO4J_PORT']}"
 NEOMODEL_SIGNALS = True
 NEOMODEL_FORCE_TIMEZONE = False
 NEOMODEL_MAX_CONNECTION_POOL_SIZE = 50

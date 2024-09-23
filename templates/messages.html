@@ -1,0 +1,25 @@
+{% load django_bootstrap5 %}
+
+<div id="django-messages" style="position:absolute;z-index:2;width:100%">
+    {% bootstrap_messages %}
+</div>
+
+
+<script type="text/javascript">
+    var messages_url = "{% url 'messages' %}";
+    
+    function load_html_from_url(url, elem) {
+       $.get(url, function(data, status) {
+            elem.html(data);
+       });   
+    }
+    
+    function display_django_messages() {
+        if (document.readyState == "complete")
+        {
+            messagesDiv = $("#django-messages");
+            messagesDiv.empty();
+            load_html_from_url(messages_url, messagesDiv);
+        }
+    }
+</script>
