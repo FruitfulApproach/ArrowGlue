@@ -353,8 +353,7 @@ def add_prop_to_def(request):
                 }
                 
                 data = render_to_string(template_name='db/quiver_preview_include.html', context=context)
-                
-                messages.success(request, message="SUCCESS (TODO)")
+            
             else:
                 raise NotImplementedError
 
