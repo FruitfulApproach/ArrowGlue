@@ -7,10 +7,10 @@
       
         <iframe class="quiver-embed" 
           src="{% static 'quiver/src/index.html' %}#q={{ prop.preview_base64 }}&embed" 
-          style="width:auto;height:auto;min-height:380px;min-width:380px;border-radius:8px;border:none;overflow:hidden;"></iframe>       
+          style="width:auto;height:auto;min-height:360px;min-width:360px;border-radius:8px;border:none;overflow:hidden;"></iframe>       
           
         <div class="d-flex">
-            <a class="btn btn-primary prop-btn" style="position:absolute;right:4%;bottom:2%;"
+            <a class="btn btn-sm btn-primary prop-btn" style="position:absolute;right:4%;bottom:2%;"
                 href="{% url 'sketch_editor'  prop.uid %}">Edit ✏</a>
             <div>
                 <p class="fw-bold mb-0">By {{ prop.maintainer }}</p>                    
