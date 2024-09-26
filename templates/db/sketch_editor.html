@@ -26,11 +26,11 @@
   <link href='{% static "css/styles.css" %}' rel="stylesheet"/>
   <link href='{% static "css/Tabs-Panel.css" %}' rel="stylesheet"/>
  </head>
- <body class="text-break" style="border-top-right-radius: 6px;">
+ <body class="text-break" style="border-top-right-radius: 6px;bottom:0%;left:0%">
   {% include 'messages.html' %}
   <nav class="navbar navbar-expand-lg navigation-clean-button navbar-light is-fixed" id="main-navbar" style="width: 100%;height: auto;max-height: auto;padding: 0px;">
    <div class="container-fluid">
-    <a class="navbar-brand d-flex flex-row align-items-center bounce animated" href="{% url 'db_index' %}" style="margin: 0px;padding: 0px;width: 153.6094px;font-family: 'Indie Flower', serif;">
+    <a class="navbar-brand d-flex flex-row align-items-center bounce animated" href="{% url 'home' %}" style="margin: 0px;padding: 0px;width: 153.6094px;font-family: 'Indie Flower', serif;">
      <img height="36" src='{% static "img/android-chrome-192x192.png" %}' style="margin-bottom: 5px;padding-left: 0px;margin-left: -6px;margin-right: 11px;" width="36"/>
      <br/>
      <strong>
@@ -164,6 +164,19 @@
         </span>
        </button>
       </li>
+      <li class="nav-item d-lg-flex justify-content-lg-end align-items-lg-center">
+       <a class="btn btn-outline-primary text-nowrap text-center d-flex float-end justify-content-lg-end align-items-lg-center navbar-main-link main-nav-btn" data-bss-hover-animate="pulse" href="{% url 'done_editing_sketch' sketch.uid %}" id="done-editing-button" onclick="redo();" role="button" style="border-width: 2px;" title="Shift+Ctrl+Z">
+        <svg class="bi bi-check-square navbar-main-icon" fill="currentColor" height="1em" viewbox="0 0 16 16" width="1em" xmlns="http://www.w3.org/2000/svg">
+         <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z">
+         </path>
+         <path d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.235.235 0 0 1 .02-.022z">
+         </path>
+        </svg>
+        <span class="main-nav-btn-text">
+         Done
+        </span>
+       </a>
+      </li>
      </ul>
     </div>
    </div>
@@ -276,9 +289,61 @@
     </div>
    </div>
   </div>
-  <h3 class="fw-bold" style="position: absolute;display: inline-flex;bottom: 0;left: 0;margin-left: 15px;">
-   {{ sketch.title }}
+  <h3 class="fw-bold" id="title-area" style="position: absolute;display: inline-flex;bottom: 0;left: 0;margin-left: 4px;width: 100%;margin-right: 8px;">
+   <button class="btn btn-success text-nowrap align-items-center flex-nowrap align-items-md-center" data-bs-target="#edit-title-modal" data-bs-toggle="modal" id="edit-title-btn" style="margin-left: 11px;" type="button">
+    Edit Title
+   </button>
+   <span class="fw-bold d-inline d-lg-flex align-items-lg-center" id="title-text" style="margin-left: 8px;">
+    {{ sketch.title }}
+   </span>
   </h3>
+  <div class="modal fade" id="edit-title-modal" role="dialog" tabindex="-1">
+   <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+     <div class="modal-header">
+      <h4 class="modal-title">
+       Edit Sketch Title
+      </h4>
+      <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button">
+      </button>
+     </div>
+     <div class="modal-body">
+      <input id="edit-title-input" maxlength="128" minlength="0" pattern=".*" placeholder="Limit: 128 characters" required="" style="width: 100%;" type="text" value="{{ sketch.title }}"/>
+     </div>
+     <div class="modal-footer">
+      <button class="btn btn-light" data-bs-dismiss="modal" type="button">
+       Close
+      </button>
+      <button class="btn btn-primary" data-bs-dismiss="modal" onclick="save_sketch_title();" type="button">
+       Save
+      </button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <link href="{% static 'quiver/src/KaTeX/katex.min.css' %}" rel="stylesheet" type="text/css"/>
+  <script defer="" src="{% static 'quiver/src/KaTeX/katex.min.js' %}">
+  </script>
+  <script defer="" src="{% static 'quiver/src/KaTeX/contrib/auto-render.min.js' %}">
+  </script>
+  <script type="text/javascript">
+   function render_katex(elem) {
+        renderMathInElement(elem, {
+          // customised options
+          // auto-render specific keys, e.g.:
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false}
+          ],
+          // rendering keys, e.g.:
+          throwOnError : false
+        });
+    }
+    
+    document.addEventListener("DOMContentLoaded", function() {
+       render_katex(document.body); 
+    });
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js">
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">

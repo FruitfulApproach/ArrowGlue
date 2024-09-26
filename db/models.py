@@ -8,7 +8,7 @@ from bidict import bidict
 
 class AuthoredContent:
     uid = UniqueIdProperty()
-    title = StringProperty(max_length=MAX_DB_TEXT_LENGTH)
+    #title = StringProperty(max_length=MAX_DB_TEXT_LENGTH)
     maintainer = StringProperty(max_length=MAX_DB_TEXT_LENGTH, default='ArrowGlue')
     creation_datetime = DateTimeProperty(default_now=True)
     datetime_edited = DateTimeProperty(default_now=True)
@@ -216,6 +216,14 @@ class Proposition(Object, AuthoredContent):
     
     logic_negated = BooleanProperty(default=False)
     #type_ = IntegerProperty(choices=PROP_TYPES, default=0)
+    
+    @property
+    def title(self):
+        return self.label
+    
+    @title.setter
+    def title(self, new_title: str):
+        self.label = new_title    
 
     @property
     def preview_base64(self):
@@ -236,14 +244,6 @@ class Proof(Object, AuthoredContent):
 
 class Definition(Proposition):
     start_prop = RelationshipTo('Proposition', 'STARTS_WITH', cardinality=ZeroOrOne)
-    
-    @property
-    def title(self):
-        return self.label
-    
-    @title.setter
-    def title(self, new_title: str):
-        self.label = new_title
         
     @property
     def preview_base64(self):

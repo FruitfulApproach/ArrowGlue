@@ -80,12 +80,12 @@
 @media (max-width: 991px) {
   .nav-item {
     padding: 3px;
-    margin: 10px;
     padding-left: 0px;
-    margin-left: 0px;
     padding-right: 0px;
-    margin-right: 0px;
     padding-top: 0px;
+    margin: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
     margin-top: -4px;
   }
 }

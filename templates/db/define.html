@@ -28,9 +28,9 @@
  </head>
  <body style="/*width: 100%;*/padding-top: 0px;">
   {% include 'messages.html' %}
-  <nav class="navbar navbar-expand-md fixed-top bg-primary py-0" style="position: sticky;width: 100%;z-index: 1;">
+  <nav class="navbar navbar-expand-md fixed-top bg-primary py-0" data-bs-theme="light" style="position: sticky;width: 100%;z-index: 1;">
    <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center bounce animated" href="{% url 'db_index' %}" style="font-family: 'Indie Flower', serif;font-size: 26px;padding-top: 0px;padding-bottom: 0px;">
+    <a class="navbar-brand d-flex align-items-center bounce animated" href="{% url 'home' %}" style="font-family: 'Indie Flower', serif;font-size: 26px;padding-top: 0px;padding-bottom: 0px;">
      <br/>
      <img height="42" src='{% static "img/android-chrome-192x192.png" %}' style="margin-right: 15px;" width="42"/>
      <br/>
@@ -51,26 +51,26 @@
     </button>
     <div class="collapse navbar-collapse d-md-flex align-items-md-center align-items-lg-center" id="navcol-2" style="margin-bottom: 8px;margin-top: 7px;">
      <h3 class="fw-bold text-start d-flex d-lg-flex justify-content-start align-items-center flex-wrap align-items-md-center align-items-lg-center" id="title-area" style="position: static;width: auto;padding-bottom: 0px;height: auto;margin-left: 13px;margin-bottom: 0px;float: left;">
-      <button class="btn btn-primary text-nowrap align-items-center flex-nowrap align-items-md-center" data-bs-target="#edit-title-modal" data-bs-toggle="modal" id="edit-title-btn" style="margin-left: 6px;width: auto;height: 28px;margin-right: 8px;" type="button">
+      <button class="btn btn-success text-nowrap align-items-center flex-nowrap align-items-md-center" data-bs-target="#edit-title-modal" data-bs-toggle="modal" id="edit-title-btn" style="margin-left: 6px;width: auto;height: 28px;margin-right: 8px;" type="button">
        Edit
       </button>
       <span class="fw-bold" style="padding-right: 0px;margin-right: 15px;">
        Definition.
       </span>
-      <span class="fw-bold d-lg-flex align-items-lg-center" id="title-text">
+      <span class="text-light" id="title-text">
        {{ definition.title }}
       </span>
      </h3>
      <ul class="navbar-nav d-md-flex ms-auto align-items-md-center">
      </ul>
-     <a class="btn btn-success float-end ms-auto ms-md-2" href="{% url 'define' %}" role="button">
-      Define
+     <a class="btn btn-outline-info link-dark float-end ms-auto ms-md-2" href="{% url 'done_editing_def' definition.uid %}" role="button">
+      Done✅
      </a>
     </div>
    </div>
   </nav>
   <div class="container-fluid py-4 py-xl-5" id="implication-chain-cards" style="padding-top: 0px;margin-top: -36px;margin-bottom: -75px;">
-   <div class="row gx-3 gy-3 row-cols-1 row-cols-md-2 row-cols-xl-3" id="implication-chain-card-list" style="margin-top: 0px;">
+   <div class="row gx-3 gy-3 justify-content-start align-items-start gy-3 row-cols-1 row-cols-md-2 row-cols-xl-3" id="implication-chain-card-list" style="margin-top: 0px;">
     {% for prop in implication_chain %}
     <div class="col">
      {% include 'db/quiver_preview_include.html' %}
@@ -112,7 +112,7 @@
       </button>
      </div>
      <div class="modal-body">
-      <input id="edit-title-input" style="width: 100%;" type="text" value="{{ definition.title }}"/>
+      <input id="edit-title-input" maxlength="128" minlength="0" pattern=".*" placeholder="Limit: 128 characters" required="" style="width: 100%;" type="text" value="{{ definition.title }}"/>
      </div>
      <div class="modal-footer">
       <button class="btn btn-light" data-bs-dismiss="modal" type="button">
@@ -129,7 +129,8 @@
    var definition_id = "{{ definition.uid }}";
     var csrf_token = "{{ csrf_token }}";
     var save_definition_url = "{% url 'save_definition_title' %}";
-    var add_def_to_prop_url =  "{% url 'add_prop_to_def' %}";
+    var add_sketch_to_def_url =  "{% url 'add_sketch_to_def' %}";
+    var remove_prop_from_def_url = "{% url 'remove_prop_from_def' %}";
   </script>
   <link href="{% static 'quiver/src/KaTeX/katex.min.css' %}" rel="stylesheet" type="text/css"/>
   <script defer="" src="{% static 'quiver/src/KaTeX/katex.min.js' %}">

@@ -148,7 +148,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DATABASE_ENGINE='sqlite3'
 DATABASE_NAME=r'C:/Users/fruit/OneDrive/Desktop/Code/WebDev/__CURRENT/ArrowGlue/ArrowGlue.db'
 
-MAX_DB_TEXT_LENGTH = 256
+MAX_DB_TEXT_LENGTH = 128
 MAX_USERNAME_LENGTH = 64
 
 # Allow Wing Pro to stop on exceptions and debug templates, when it is present

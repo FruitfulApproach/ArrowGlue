@@ -8,6 +8,7 @@
     
 <script type="text/javascript">
     var sketch_id = "{{ sketch.uid }}";
+    var csrf_token = "{{ csrf_token }}";
     var quiver_ui = null;
     var quiver_frame = null; 
     var quiver_save_btn = null;
@@ -25,6 +26,7 @@
     var quiver_right_align_labels_btn = null;
     var quiver_clear_align_labels_btn = null;
     var quiver_over_align_labels_btn = null;
+    var save_sketch_url = "{% url 'save_sketch_title' %}";
     
     document.addEventListener("DOMContentLoaded", function(event) { 
         quiver_frame = document.getElementById("quiver-frame");
@@ -129,6 +131,40 @@
         });       
        
     });
+    
+    function save_sketch_title()
+    {
+        var new_text = $("#edit-title-input").val();
+        $("#title-text").text(new_text);
+        
+        render_katex(document.getElementById("title-text"));
+    
+        var json_data = {
+            'title' : new_text,
+            'sketch_id': sketch_id           
+        };
+    
+        $.ajax({
+            type: "POST",
+            url: save_sketch_url,
+    
+            data: {
+                 csrfmiddlewaretoken: csrf_token,
+                 json: JSON.stringify(json_data)
+            },
+    
+            success: function (response) {
+                // save_prop service's response:
+                console.log(response);
+                display_django_messages();
+            },
+    
+            error: function (response) {
+                console.log(response);
+                display_django_messages();
+            }
+        });
+    }
 
     function prepare_arrow_style_defaults()
     {

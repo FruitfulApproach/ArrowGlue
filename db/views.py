@@ -10,19 +10,61 @@ from django.template.loader import render_to_string
 import traceback
 
 
+def save_sketch_title(request):
+    try:
+        if request.method == 'POST':
+            json_data = request.POST['json']
+            json_data = json.loads(json_data)
+            title = json_data['title']
+            
+            if len(title) > MAX_DB_TEXT_LENGTH:
+                msg = f"The max DB text length was exceeded. Your title will be truncated to length {MAX_DB_TEXT_LENGTH} chars."
+                messages.warning(request, message=msg)
+                title = title[:MAX_DB_TEXT_LENGTH]
+                
+            sketch_id = json_data['sketch_id']            
+            sketch = Sketch.nodes.get_or_none(uid=sketch_id)
+            
+            if sketch is None:
+                raise f"Definition with UID {sketch_id} not found in the database. 😭"
+            
+            sketch.title = title
+            sketch.save()
+            
+            data = f"Successfully set Sketch's title to {title}."
+            
+        else:            
+            raise "Incorrect AJAX send method (needs to be POST)."
+        
+    except Exception as e:
+        if __debug__:
+            raise e
+        data = str(e)
+        messages.error(request, message=data)
+        
+    return JsonResponse(data, safe=False)
+
+
+
 def save_definition_title(request):
     try:
         if request.method == 'POST':
             json_data = request.POST['json']
             json_data = json.loads(json_data)
             title = json_data['title']
+            
+            if len(title) > MAX_DB_TEXT_LENGTH:
+                msg = f"The max. DB text length was exceeded. Your title will be truncated to length {MAX_DB_TEXT_LENGTH} chars."
+                messages.warning(request, message=msg)
+                title = title[:MAX_DB_TEXT_LENGTH]
+                
             definition_id = json_data['definition_id']            
             definition = Definition.nodes.get_or_none(uid=definition_id)
             
             if definition is None:
                 raise f"Definition with UID {definition_id} not found in the database. 😭"
             
-            definition.label = title
+            definition.title = title
             definition.save()
             
             data = f"Successfully set Definition's title to {title}."
@@ -75,6 +117,17 @@ def save_sketch(request):
     return JsonResponse(data, safe=False)
 
 
+def done_editing_sketch(request, sketch_id: str):
+    try:
+        done_url = pop_editing_referer(request, Sketch, sketch_id)            
+        return redirect(done_url)
+        
+    except Exception as e:
+        if __debug__:
+            raise e
+        return error(error_txt=traceback.format_exc())
+    
+
 def sketch_editor(request, sketch_id: str):
     try:            
         sketch = Sketch.nodes.get_or_none(uid=sketch_id)
@@ -82,16 +135,18 @@ def sketch_editor(request, sketch_id: str):
         if sketch is None:
             raise Exception(f"Sketch with UID {sketch_id} doesn't exist in the database.")
         
+        push_editing_referer(request, Sketch, sketch_id)
+        
         sketch.save()
         quiver_base64 = sketch.to_quiver_format()
         quiver_base64 = json.dumps(quiver_base64)
         quiver_base64 = quiver_base64.encode(encoding='ascii')
         quiver_base64 = base64.b64encode(quiver_base64)
         quiver_base64 = quiver_base64.decode(encoding='ascii')      # 😅 many steps lol
-        
+                
         data = {
             'sketch' : sketch,
-            'quiver_base64' : quiver_base64, 
+            'quiver_base64' : quiver_base64,
         }
         
         messages.success(request, message='Successfully loaded sketch from the database.')
@@ -103,22 +158,57 @@ def sketch_editor(request, sketch_id: str):
         return error(error_txt=traceback.format_exc())
         
 
-
-def test1(request):
-    #sketch = DiagramSketch(maintainer='EnjoysMath')
-    #sketch.save()
-    #A = Object(text='A', parent_uid=sketch.uid, parent_index=0)
-    #A.save()
-    #B = Object(text='B', parent_uid=sketch.uid, parent_index=1)
-    #B.save()
-    #f = Arrow(text='f', parent_uid=sketch.uid, parent_index=2)
-    #f.save()
-    #A.sourced_arrows.connect(f)
-    #A.save()
-    #f.dest_node.connect(B)
-    #f.save()
+def push_editing_referer(request, cls, db_id):
+    if not isinstance(cls, str):
+        cls = cls.__name__
+        
+    referer = request.META.get('HTTP_REFERER', None)
     
-    return render(request, template_name='db/test1.html')
+    if referer is None:
+        referer = reverse('home')
+        
+    session = request.session
+    
+    editing = session.get('editing', None)
+    
+    if not editing:
+        editing = session['editing'] = {}
+    
+    if cls not in editing:
+        editing[cls] = {}
+        
+    items = editing[cls]
+        
+    if db_id not in items:
+        items[db_id] = referer
+        
+    request.session.modified = True
+        
+        
+def pop_editing_referer(request, cls, db_id):
+    if not isinstance(cls, str):
+        cls = cls.__name__
+        
+    session = request.session
+    editing = session.get('editing', None)    
+    done_url = None
+    
+    if editing:
+        if cls in editing:                    
+            defs = editing[cls]
+            
+            if db_id in defs:
+                done_url = defs[db_id]
+                del defs[db_id]
+            else:
+                defs.clear()
+                
+            request.session.modified = True                
+        
+    if done_url is None:    
+        done_url = reverse('home')
+        
+    return done_url
 
 
 def new_proof(request):
@@ -321,42 +411,41 @@ def index(request):
     return render(request, "db/index.html")
 
 
-def add_prop_to_def(request):
+def add_sketch_to_def(request):
     try:            
         if request.method == "POST":
             json_data = request.POST['json']
             json_data = json.loads(json_data)                     
+    
+            definition_id = json_data['definition_id']
+            definition = Definition.nodes.get_or_none(uid=definition_id)
             
-            prop_type = json_data['type']
-                        
-            if prop_type == 'sketch':
-                definition_id = json_data['definition_id']
-                definition = Definition.nodes.get_or_none(uid=definition_id)
-                
-                if definition is None:
-                    raise f"Definition with UID {definition_id} does not exist in the database. (╯‵□′)╯︵┻━┻"
-                
-                sketch = Sketch()
-                sketch.title = 'Title 😎?'
-                sketch.save()
-                end = definition.right_most_prop()
-                
-                if end:
-                    end.arrows_to.connect(sketch)
-                    end.save()
-                else:
-                    definition.start_prop.connect(sketch)
-                    definition.save()
-                
-                context = {
-                    'prop' : sketch,                    
-                }
-                
-                data = render_to_string(template_name='db/quiver_preview_include.html', context=context)
+            if definition is None:
+                raise f"Definition with UID {definition_id} does not exist in the database. (╯‵□′)╯︵┻━┻"
             
+            sketch = Sketch()
+            sketch.title = 'Title 😎?'
+            sketch.save()
+            end = definition.right_most_prop()
+            
+            if end:
+                end.arrows_to.connect(sketch)
+                end.save()
             else:
-                raise NotImplementedError
-
+                definition.start_prop.connect(sketch)
+                definition.save()
+            
+            context = {
+                'prop' : sketch,                    
+            }
+            
+            card_content =  render_to_string(template_name='db/quiver_preview_include.html', context=context)
+            
+            data = {
+                'prop_id': sketch.uid,
+                'card_content': card_content, 
+            }
+        
         else:
             raise "Incorrect AJAX send method (needs to be POST)"
             
@@ -367,16 +456,80 @@ def add_prop_to_def(request):
             data = str(e)
         messages.error(request, messages=data)    
             
+    return JsonResponse(data, safe=False)
+
+
+def remove_prop_from_def(request):
+    try:            
+        if request.method == "POST":
+            json_data = request.POST['json']
+            json_data = json.loads(json_data)                     
+
+            prop_id = json_data['prop_id']
+            
+            query = f"""
+            MATCH (P:Proposition)-[r:ARROWS_TO]->(Q:Proposition)
+            WHERE Q.uid='{prop_id}'
+            RETURN P,Q
+            """
+            
+            results,_ = db.cypher_query(query, resolve_objects=True)
+            
+            if results:
+                results = results[0]                
+                P, Q = results               
+                codQ = Q.arrows_to.single()
+                P.arrows_to.disconnect(Q)
+                
+                if codQ:
+                    Q.arrows_to.disconnect(codQ)
+                    P.arrows_to.connect(codQ)
+                
+                Q.delete()
+            else:
+                Q = Proposition.nodes.get_or_none(uid=prop_id)
+                
+                if Q:
+                    Q.delete()
+                else:
+                    msg = f"Proposition with UID {prop_id} does not exist in the database. 😢"
+                    messages.warning(request, message=msg)
+                
+            msg = "Successfully deleted the proposition from the definition. 😎"
+            messages.success(request, message=msg)
+            data = ""
+        else:
+            raise "Incorrect AJAX send method (needs to be POST)"
+            
+    except Exception as e:
+        #if __debug__:            #raise e
+        
+        data = str(e)
+        messages.error(request, messages=data)    
+            
     return JsonResponse(data, safe=False)    
+    
 
 
 def define(request):
     definition = Definition()
     definition.title = 'Title 🤓?'
-    definition.save()    
+    definition.save()
     
-    url = reverse('edit_definition', kwargs={'definition_id': definition.uid,})
+    url = reverse('edit_definition', args=(definition.uid, ))
+
     return redirect(url)
+
+
+def done_editing_def(request, definition_id: str):
+    try:
+        done_url = pop_editing_referer(request, Definition, definition_id)            
+        return redirect(done_url)
+        
+    except Exception as e:
+        if __debug__:
+            raise e
+        return error(error_txt=traceback.format_exc())         
 
 
 def edit_definition(request, definition_id: str):
@@ -384,10 +537,12 @@ def edit_definition(request, definition_id: str):
         definition = Definition.nodes.get_or_none(uid=definition_id)
         if definition is None:
             raise f"Definition with UID {definition_id} does not exist in the database." + \
-                  "┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻"
+                  "┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻"    
+
+        push_editing_referer(request, Definition, definition_id)
         
         start = definition.start_prop.single()
-        implication_chain = []
+        implication_chain = []        
         
         if start:
             query = f"""
@@ -406,7 +561,7 @@ def edit_definition(request, definition_id: str):
                     break
             else:
                 implication_chain = [start]
-                        
+                
         context = {
             'definition' : definition,
             'implication_chain': implication_chain,
@@ -418,4 +573,6 @@ def edit_definition(request, definition_id: str):
         if __debug__:
             raise e
         return error(error_txt=traceback.format_exc())
-        
+    
+
+

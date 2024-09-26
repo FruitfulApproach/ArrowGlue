@@ -1,17 +1,19 @@
 {% load static %}
 
 
-<div class="card" style="width:auto">
+<div class="card" style="width:auto;height:440px" id="prop-id-{{ prop.uid }}">
     <div class="card-body prop-card">
         <h5 class="card-title">{{prop.title}}</h4> 
       
         <iframe class="quiver-embed" 
           src="{% static 'quiver/src/index.html' %}#q={{ prop.preview_base64 }}&embed" 
-          style="width:auto;height:auto;min-height:360px;min-width:360px;border-radius:8px;border:none;overflow:hidden;"></iframe>       
+          style="margin:0;padding:0;width:auto;height:auto;min-height:320px;min-width:320px;border-radius:8px;border:none;overflow:hidden;"></iframe>       
           
         <div class="d-flex">
-            <a class="btn btn-sm btn-primary prop-btn" style="position:absolute;right:4%;bottom:2%;"
-                href="{% url 'sketch_editor'  prop.uid %}">Edit ✏</a>
+            <div style="position:absolute;right:4%;bottom:2%;">
+                <a class="btn btn-sm btn-primary prop-btn" href="{% url 'sketch_editor' prop.uid %}">Edit✏</a>        
+                <button class="btn btn-sm btn-primary prop-btn" onclick="remove_prop('{{ prop.uid }}');">Delete❌</a>
+            </div>
             <div>
                 <p class="fw-bold mb-0">By {{ prop.maintainer }}</p>                    
             </div>
