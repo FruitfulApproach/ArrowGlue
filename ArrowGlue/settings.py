@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,12 +83,20 @@ WSGI_APPLICATION = "ArrowGlue.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+
+if 'DATABASE_URL' in os.environ:
+    DATABASES = {
+        'default': dj_database_url.config()
     }
-}
+    
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+
 
 if 'WORKSTATION_DEV' in os.environ and os.environ['WORKSTATION_DEV'] == '1':
     NEOMODEL_NEO4J_BOLT_URL = os.environ['NEOMODEL_NEO4J_BOLT_URL']
@@ -158,9 +167,6 @@ CSRF_COOKIE_SECURE = True # Set this to True to avoid transmitting the CSRF cook
 SESSION_COOKIE_SECURE = True # Set this to True to avoid transmitting the session cookie over HTTP accidentally.
 
 # Allow Wing Pro to stop on exceptions and debug templates, when it is present
-
-import os
-
 try:
     from . import wing_debug_support
     del wing_debug_support
@@ -176,3 +182,6 @@ if "WINGDB_ACTIVE" in os.environ:
         TEMPLATE_DEBUG = True
 
 
+# Configure Django App for Heroku.
+import django_heroku
+django_heroku.settings(locals())
